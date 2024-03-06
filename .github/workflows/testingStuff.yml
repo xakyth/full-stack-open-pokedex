@@ -23,7 +23,7 @@ jobs:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
       - name: commit messages contains skip?
-        if: ${{ contains('#skip', join(toJson(github.event.commits.*.message))) }}
+        if: ${{ contains('#skip', join(github.event.commits.*.message)) }}
         run: |
           echo "$COMMIT_MESSAGES"
           echo "contains xd xdx xxd"
