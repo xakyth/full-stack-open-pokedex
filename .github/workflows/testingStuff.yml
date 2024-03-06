@@ -26,4 +26,4 @@ jobs:
         if: ${{ contains(join(github.event.commits.*.message), '#skip') }}
         run: |
           echo "$COMMIT_MESSAGES"
-          echo "contains xd xdx xx d"
+          echo "contains xd xdx xx dd"
