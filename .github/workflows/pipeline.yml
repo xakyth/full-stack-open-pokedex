@@ -33,17 +33,17 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push'}}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+      - name: TEST list cur dir
+        run: ls -la
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
     permissions:
       contents: write
     steps:
-      - name: CHANGE DIR HELPS?
-        run: |
-          ls -la
-          cd $GITHUB_WORKSPACE
-          ls -la
+      - name: CHECKOUT HELPS?
+        uses: actions/checkout@v4
+
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.67.0
         env:
