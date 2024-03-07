@@ -46,3 +46,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+  build_notification:
+    needs: [tag_release]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Build success discord notification
+        if: success()
+        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        with:
+          severity: info
+          details: Build Succeeded!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Build failure discord notification
+        if: failure()
+        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        with:
+          severity: error
+          details: Build Failed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Build cancelled discord notification
+        if: cancelled()
+        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        with:
+          severity: warn
+          details: Build cancelled!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
