@@ -48,7 +48,7 @@ jobs:
           DEFAULT_BUMP: patch
   build_notification:
     if: ${{ always() }}
-    needs: [tag_release]
+    needs: [simple_deployment_pipeline, tag_release]
     runs-on: ubuntu-20.04
     steps:
       - name: Build success discord notification
@@ -59,14 +59,14 @@ jobs:
           details: Build Succeeded!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build failure discord notification
-        if: ${{ failure() && needs.tag_release.result == 'failure' }}
+        if: ${{ failure() && (needs.tag_release.result == 'failure' || needs.simple_deployment_pipeline.result == 'failure') }}
         uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
         with:
           severity: error
           details: Build Failed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build cancelled discord notification
-        if: ${{ cancelled() && needs.tag_release.result == 'cancelled' }}
+        if: ${{ cancelled() && (needs.tag_release.result == 'cancelled' || needs.simple_deployment_pipeline.result == 'cancelled') }}
         uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
         with:
           severity: warn
