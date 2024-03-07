@@ -47,6 +47,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
   build_notification:
+    if: ${{ always() }}
     needs: [tag_release]
     runs-on: ubuntu-20.04
     steps:
